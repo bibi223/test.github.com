@@ -1,37 +1,24 @@
 ## Welcome to GitHub Pages 
-# so easy where don't understanding fire where
-You can use the [editor on GitHub](https://github.com/bibi223/test.github.com/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
 
 # Header 1
 ## Header 2
 ### Header 3
 
-- Bulleted
-- List
+#程序的优化陷阱
+##memory aliasing(存储器别名使用)
+eg:
+void twiddle_1(int *xp,int *yp)
+{
+  *xp += *yp;
+  *xp += *yp;
+}
+void twiddle_2(int *xp,int *yp)
+{
+  *xp += 2 * *yp;
+}
 
-1. Numbered
-2. List
+f_1需要六次（读xp*2,读yp*2,写xp*2）存储器引用。
+f_2需要3次（读xp,读yp,写xp）存储器引用。
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/bibi223/test.github.com/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+所以我们可能会想让编译器将f_1优化成f_2的样子。但是如果遇到一下情况
